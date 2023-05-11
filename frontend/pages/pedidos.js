@@ -29,9 +29,6 @@ const Pedidos = () => {
 
     if (loading) return "Cargando..."
 
-    console.log("Despues del LOADING!!!!")
-    console.log(data)
-
     const {obtenerPedidos} = data
 
     return (
