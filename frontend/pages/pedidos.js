@@ -43,7 +43,7 @@ const Pedidos = () => {
           <p className='bg-blue-800 py-2 px-3 mt-3 inline-block text-white rounded text-sm hover:bg-blue-400 uppercase font-bold'>Nuevo Pedido</p>
         </Link>
         {obtenerPedidos.length === 0 ?(
-          <p className='mt-5 text-center text-2xl'>No hay pedidos aún</p>
+          <p className='mt-5 text-center text-2xl'>De momento no existen pedidos creados</p>
         ):(
           obtenerPedidos.map(pedido => (
             <Pedido
