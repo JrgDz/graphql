@@ -80,9 +80,8 @@ const resolvers = {
             }
         },
         obtenerPedidosPorVendedor: async (_, { }, ctx) => {
-
             // Validar si el vendedor tiene pedidos
-            const existenPedidos = await Pedido.find({ vendedor: ctx.usuario.id })
+            const existenPedidos = await Pedido.find({ vendedor: ctx.usuario.id }).populate('cliente')
             if (!existenPedidos) {
                 throw new Error("El vendedor no tiene pedidos asignados")
             }
@@ -301,10 +300,9 @@ const resolvers = {
         },
         nuevoPedido: async (_, { input }, ctx) => {
 
-            let total = 0
-
             const { cliente, pedido } = input
-
+            console.log("NUEVO PEDIDO!!!")
+            console.log(input)
             // Validar si el cliente existe
             let clienteExiste = await Cliente.findById(cliente)
             if (!clienteExiste) {
@@ -375,7 +373,7 @@ const resolvers = {
         actualizarPedido: async (_, { id, input }, ctx) => {
             let inexistentes = 0
             let contador = 0
-            let total = 0
+            // let total = 0
 
             const { pedido, cliente } = input
 
@@ -425,12 +423,38 @@ const resolvers = {
 
             // Guardar el pedido
             if (inexistentes < contador || contador === 0) {
-                input.total = total
+                // input.total = total
                 const resultado = await Pedido.findOneAndUpdate({ _id: id }, input, { new: true })
                 return resultado
             }
 
-        }
+        },
+        eliminarPedido: async (_, { id }, ctx) => {
+            // Validar que el pedido existe
+            let pedido = await Pedido.findById(id)
+
+            if (!pedido) {
+                throw new Error("El pedido no existe")
+            }
+
+            // Validar que el cliente tenga vendedor asigando
+            // if (cliente.vendedor === undefined) {
+            //     throw new Error("El usuario no tiene vendedor asigando")
+            // }
+
+            // Validar que el cliente tenga vendedor asigando
+            if (pedido.vendedor === undefined) {
+                throw new Error("El usuario no tiene vendedor asigando")
+            }
+
+            // Validar que el pedido pertenece al vendedor
+            if (pedido.vendedor.toString() !== ctx.usuario.id) {
+                throw new Error("El pedido no pertenece al usuario logeado")
+            }
+
+            pedido = await Pedido.findByIdAndRemove(id)
+            return "El pedido fue eliminado exitosamente"
+        },
     }
 };
 

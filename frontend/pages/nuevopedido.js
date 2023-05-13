@@ -16,7 +16,8 @@ import Total from '@/components/pedidos/Total'
 const NUEVO_PEDIDO = gql`
     mutation nuevoPedido($input: PedidoInput) {
         nuevoPedido(input: $input) {
-        id
+        id,
+        total
         }
     }
 `
@@ -41,7 +42,6 @@ const NuevoPedido = () => {
 
         // Remover la data no necesaria del producto
         const pedido = productos.map(({__typename, existencia, ...producto})=>producto)
-        // console.log(pedido)
 
         const {id} = cliente
         try {
@@ -54,7 +54,6 @@ const NuevoPedido = () => {
                     }
                 }
             })
-
             swalFlotante.fire({
                 icon:"success",
                 title:"Pedido generado exitosamente"

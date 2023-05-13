@@ -37,7 +37,7 @@ const typeDefs = gql`
         id: ID
         pedido: [PedidoGrupo]
         total: Float
-        cliente: ID
+        cliente: Cliente
         vendedor: ID
         fecha: String
         estado: EstadoPedido
@@ -149,6 +149,7 @@ const typeDefs = gql`
         # Pedidos
         nuevoPedido (input: PedidoInput) : Pedido
         actualizarPedido (id: ID!, input: PedidoInput) : Pedido
+        eliminarPedido (id: ID!): String
     }
 `;
 
